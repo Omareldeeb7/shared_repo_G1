@@ -3,4 +3,5 @@ WORKDIR /app
 COPY app.js app.js
 RUN npm install
 COPY . .
+EXPOSE 8081
 CMD [ "node", "app.js"]
