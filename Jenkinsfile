@@ -14,5 +14,13 @@ pipeline {
                 sh './mvnw test'
             }
         }
+        stage('Docker Build') {
+            steps {
+                echo 'Building the Docker image'
+                sh '''
+                    docker build -t omareldeeeb/app-test:jenkins-test .
+                '''
+            }
+        }
     }
 }
