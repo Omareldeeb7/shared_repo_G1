@@ -26,6 +26,8 @@ pipeline {
                         sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"                       
                         // Push the image
                         sh "docker push omareldeeeb/app-test:jenkins-test"
+                         }
+                }
             }
         }
     }
