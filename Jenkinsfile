@@ -4,7 +4,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    sh 'mvnw clean package'
+                    sh 'mvn clean package'
                 }
             }
         }
@@ -12,7 +12,7 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    sh 'mvnw test'
+                    sh 'mvn test'
                 }
             }
         }
@@ -20,7 +20,7 @@ pipeline {
         stage('Package') {
             steps {
                 script {
-                    sh 'mvnw package'
+                    sh 'mvn package'
                 }
             }
         }
