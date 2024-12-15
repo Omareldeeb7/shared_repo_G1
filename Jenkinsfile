@@ -19,12 +19,18 @@ pipeline {
                 script {
                     echo 'Building and pushing Docker Image...'
                     docker.build("omareldeeeb/app-test:jenkins-test")
-                    
+
                     docker.withRegistry('https://index.docker.io/v1/', 'my-docker-hub') {
                         docker.image("omareldeeeb/app-test:jenkins-test").push()
                     }
                 }
             }
         }        
-    }      
+    }
+    post {
+        always {
+            echo 'Cleaning up...'
+            sh "docker rmi docker push omareldeeeb/app-test:jenkins-test || true"
+        }
+    }            
 }
