@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        DOCKER_TAG = "khaledmohamed447/app-test:${env.BUILD_NUMBER ?: 'latest'}"
+    }
     stages {
         stage('Build') {
             steps {
@@ -17,10 +20,17 @@ pipeline {
             }
         }
 
-        stage('Package') {
+        stage('Docker Build and Push') {
             steps {
-                script {
-                    sh 'mvn package'
+                echo 'Building and pushing Docker image...'
+                withCredentials([usernamePassword(credentialsId: 'my-docker-hub', 
+                                                  usernameVariable: 'DOCKER_USERNAME', 
+                                                  passwordVariable: 'DOCKER_PASSWORD')]) {
+                    script {
+                        sh "docker build -t ${DOCKER_TAG} ."
+                        sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
+                        sh "docker push ${DOCKER_TAG}"
+                    }
                 }
             }
         }
@@ -34,6 +44,12 @@ pipeline {
         }
         failure {
             echo 'Pipeline failed.'
+        }
+        cleanup {
+            script {
+                echo 'Cleaning up Docker images...'
+                sh "docker rmi ${DOCKER_TAG} || true"
+            }
         }
     }
 }
