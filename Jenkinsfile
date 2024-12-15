@@ -10,23 +10,26 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo 'Test the application...'
+                echo 'Testing the application...'
                 sh './mvnw test'
             }
         }
-        stage('Docker Build') {
+        stage('Docker Build and Push') {
             steps {
-                echo 'Pushing Docker Image to Docker Hub...'
+                echo 'Building and pushing Docker Image to Docker Hub...'
                 withCredentials([usernamePassword(credentialsId: 'my-docker-hub', 
-                                               usernameVariable: 'DOCKER_USERNAME', 
-                                               passwordVariable: 'DOCKER_PASSWORD')]) {
+                                                  usernameVariable: 'DOCKER_USERNAME', 
+                                                  passwordVariable: 'DOCKER_PASSWORD')]) {
                     script {
-                        sh "docker build -t omareldeeeb/app-test:jenkins-test"
+                        // Build the Docker image
+                        sh "docker build -t omareldeeeb/app-test:jenkins-test ."
+                        
                         // Log in to Docker Hub
-                        sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"                       
-                        // Push the image
+                        sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"
+                        
+                        // Push the Docker image
                         sh "docker push omareldeeeb/app-test:jenkins-test"
-                         }
+                    }
                 }
             }
         }
