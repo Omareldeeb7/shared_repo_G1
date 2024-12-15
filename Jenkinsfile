@@ -28,7 +28,7 @@ pipeline {
                                                   passwordVariable: 'DOCKER_PASSWORD')]) {
                     script {
                         sh "docker build -t ${DOCKER_TAG} ."
-                        sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
+                        sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"
                         sh "docker push ${DOCKER_TAG}"
                     }
                 }
