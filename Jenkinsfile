@@ -4,7 +4,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    sh 'mvn clean  package'
+                    sh 'mvn clean package'
                 }
             }
         }
@@ -24,7 +24,7 @@ pipeline {
                 }
             }
         }
-
+    }
     post {
         always {
             echo 'Pipeline execution completed.'
