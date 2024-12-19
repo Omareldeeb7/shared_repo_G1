@@ -15,16 +15,12 @@ pipeline {
         }
         stage ('Docker Build and Push') {
             steps {
-                echo 'Building and pushing Docker Image to Docker Hub...'
-                withCredentials([usernamePassword(credentialsId: 'my-docker-hub', 
-                                                  usernameVariable: 'DOCKER_USERNAME', 
-                                                  passwordVariable: 'DOCKER_PASSWORD')]) {
-                    script {
-                        sh'''
-                        docker build -t omareldeeeb/app-test:jenkins-test .
-                        docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
-                        docker push omareldeeeb/app-test:jenkins-test
-                        '''
+                script {
+                    echo 'Building and pushing to Docker hub'
+                    docker.build("omareldeeeb/app-test:jenkins-test")
+
+                    docker.withRegistry('https://index.docker.io/v1/', 'my-docker-hub') {
+                        docker.image("omareldeeeb/app-test:jenkins-test").push()
                     }
                 }
             }        
