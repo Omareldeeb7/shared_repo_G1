@@ -19,13 +19,13 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'my-docker-hub',
                                                   usernameVariable: 'DOCKER_USERNAME',
                                                   passwordVariable: 'DOCKER_PASSWORD' )]) {
-                    script {
+                    
                         sh '''
                             docker build -t omareldeeeb/app-test:jenkins-java .
                             docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
                             docker push omareldeeeb/app-test:jenkins-java
                         '''
-                    }
+                    
                 }
             }
         }
