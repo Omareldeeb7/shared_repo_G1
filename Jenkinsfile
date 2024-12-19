@@ -23,7 +23,7 @@ pipeline {
                         docker.image("omareldeeeb/app-test:jenkins-test").push()
                     }
                 }
-            }            
+            }           
         }
     }
 }
