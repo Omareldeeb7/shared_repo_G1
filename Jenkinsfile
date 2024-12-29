@@ -27,6 +27,15 @@ pipeline {
                 }
             }        
         }
+        stage('Docker Run') {
+            steps {
+                dir('Ansible'){
+                  script {
+                         ansiblePlaybook credentialsId: 'ansible-ssh', disableHostKeyChecking: true, installation: 'ansible', inventory: '/opt/ansible/ansible-demo/', playbook: 'playbook.yml'
+                        }
+                   }
+              }
+        }
     }
 }
 
